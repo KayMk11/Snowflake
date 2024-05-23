@@ -27,7 +27,7 @@ namespace Snowflake
             {
             case GraphicsAPI::OpenGL:
             {
-                std::shared_ptr<Shader> shader = std::make_shared<OpenGLShader>(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath);
+                std::shared_ptr<Shader> shader = std::make_shared<GLShader>(name, vertexShaderPath, fragmentShaderPath, geometryShaderPath);
                 AddShader(name, shader);
                 return shader;
             }

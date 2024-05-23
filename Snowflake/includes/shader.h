@@ -36,7 +36,7 @@ namespace Snowflake
 
     };
 
-    class OpenGLShader : public Shader
+    class GLShader : public Shader
     {
         void checkErrors(unsigned int shader, std::string type)
         {
@@ -68,7 +68,7 @@ namespace Snowflake
         }
 
     public:
-        OpenGLShader(std::string _name, std::string vertexShaderPath, std::string fragmentShaderPath, std::string geometryShaderPath = "")
+        GLShader(std::string _name, std::string vertexShaderPath, std::string fragmentShaderPath, std::string geometryShaderPath = "")
         {
             name = _name;
             std::string vertexShaderCode;
