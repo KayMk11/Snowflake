@@ -12,7 +12,7 @@ namespace Snowflake
 		SF_LOGE("GLFW Error %d : %s", error, description);
 	}
 
-    class Window : public EventConsumer
+    class Window : public EventListener
     {
     protected:
         int height, width;

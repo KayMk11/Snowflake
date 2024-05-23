@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
-
 // -------SF Includes----------
 #include "includes/core.h"
 #include "includes/key_codes.h"

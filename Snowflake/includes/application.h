@@ -4,7 +4,7 @@
 #include "input.h"
 #include "window.h"
 namespace Snowflake {
-    class Application : public EventConsumer
+    class Application : public EventListener
     {
         static Application* instance;
     protected:

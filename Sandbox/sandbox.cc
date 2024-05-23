@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include "Snowflake/snowflake.h"
 
 class Sandbox : public Snowflake::Application

@@ -27,7 +27,7 @@ namespace Snowflake
         const char *getName() { return name.data(); }
     };
 
-    class EventConsumer
+    class EventListener
     {
     public:
         virtual void onEvent(Event &e) = 0;

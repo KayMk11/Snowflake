@@ -6,7 +6,7 @@ namespace Snowflake
     class EventDispatcher
     {
         static EventDispatcher *instance;
-        std::vector<EventConsumer *> listeners[20]; //hardcoding number of Events supported
+        std::vector<EventListener *> listeners[20]; //hardcoding number of Events supported
         EventDispatcher(){};
 
 
@@ -22,7 +22,7 @@ namespace Snowflake
                 instance = new EventDispatcher();
             return instance;
         }
-        void setCallback(int type, EventConsumer *consumer) 
+        void setCallback(int type, EventListener *consumer) 
         {
             listeners[type].emplace_back(consumer);
         }
