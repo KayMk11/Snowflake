@@ -6,7 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../vendor/includes/stb_image.h"
 
-#include "core.h"
+#include "core/core.h"
 #include "renderer.h"
 namespace Snowflake
 {

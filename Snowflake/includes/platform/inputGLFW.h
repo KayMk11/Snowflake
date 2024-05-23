@@ -1,5 +1,5 @@
 #pragma once
-#include "input.h"
+#include "application/input.h"
 
 namespace Snowflake
 {

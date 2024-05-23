@@ -1,4 +1,5 @@
 #pragma once
+#include "core.h"
 #include "events.h"
 
 namespace Snowflake

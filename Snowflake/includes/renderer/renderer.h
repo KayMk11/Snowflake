@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core.h"
+#include "core/core.h"
 namespace Snowflake
 {
     enum class GraphicsAPI {
@@ -11,6 +11,10 @@ namespace Snowflake
     class Renderer
     {
     public:
+        void prerender() {}
+        void render() {}
+        void postrender() {}
+
         static GraphicsAPI getAPI()
         {
 #ifdef SF_USE_OPENGL

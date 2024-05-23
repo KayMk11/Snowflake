@@ -4,7 +4,8 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>
-#include "core.h"
+
+#include "core/core.h"
 
 namespace Snowflake
 {

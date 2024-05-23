@@ -1,6 +1,6 @@
 #pragma once
 #include <unordered_map>
-#include "core.h"
+#include "core/core.h"
 #include "shader.h"
 #include "renderer.h"
 namespace Snowflake

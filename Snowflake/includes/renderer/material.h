@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "texture.h"
-#include "core.h"
+#include "core/core.h"
 
 namespace Snowflake {
     class Material {

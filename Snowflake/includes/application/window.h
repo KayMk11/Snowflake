@@ -3,7 +3,8 @@
 #include <memory>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "graphics_context.h"
+
+#include "renderer/graphics_context.h"
 namespace Snowflake
 {
 

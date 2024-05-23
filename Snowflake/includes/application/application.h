@@ -1,6 +1,6 @@
 #pragma once
-#include "events.h"
-#include "event_dispatcher.h"
+#include "core/events.h"
+#include "core/event_dispatcher.h"
 #include "input.h"
 #include "window.h"
 namespace Snowflake {

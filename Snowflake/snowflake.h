@@ -1,11 +1,11 @@
 #pragma once
 
 // -------SF Includes----------
-#include "includes/core.h"
-#include "includes/key_codes.h"
-#include "includes/window.h"
-#include "includes/application.h"
-#include "includes/inputGLFW.h"
+#include "core/core.h"
+#include "core/key_codes.h"
+#include "application/window.h"
+#include "application/application.h"
+#include "platform/inputGLFW.h"
 // #include "includes/application.cpp"
 // -------SF Includes----------
 
