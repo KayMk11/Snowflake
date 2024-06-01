@@ -4,8 +4,10 @@
 #include "texture.h"
 #include "core/core.h"
 
-namespace Snowflake {
-    class Material {
+namespace Snowflake
+{
+    class Material
+    {
     public:
         std::string name;
         glm::vec3 ambient;      // Ka
@@ -16,7 +18,7 @@ namespace Snowflake {
         float alpha;            // dissolve / d
         int illumination;       // illum
 
-        std::vector<Texture> textures;
+        std::vector<std::shared_ptr<Texture>> textures;
 
         std::string map_ambient_path;
         std::string map_diffuse_path;

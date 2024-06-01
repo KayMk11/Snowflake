@@ -3,29 +3,31 @@
 #include "core/event_dispatcher.h"
 #include "input.h"
 #include "window.h"
-namespace Snowflake {
+namespace Snowflake
+{
     class Application : public EventListener
     {
-        static Application* instance;
+        static Application *instance;
+
     protected:
         bool running;
-        Window* window;
+        Window *window;
+
     public:
         Application()
         {
-            if(instance != nullptr)
+            if (instance != nullptr)
             {
                 SF_LOGE("Application already created");
             }
             instance = this;
 
             window = new Snowflake::WindowGLFW();
-            running = true; 
-
+            running = true;
         }
 
         virtual void onUpdate() = 0;
-        
+
         void run()
         {
             int i = 1;
@@ -45,17 +47,16 @@ namespace Snowflake {
             SF_LOGI("Shutting down");
             running = false;
         }
-     
+
         virtual void onEvent(Event &e) override
         {
-
         }
-     
-        Window* getApplicationWindow() { return window; }
-     
-        static inline Application* get() {return instance; }
-    };
-	Application* Application::instance = nullptr;
 
-    Application* create_application();
+        Window *getApplicationWindow() { return window; }
+
+        static inline Application *get() { return instance; }
+    };
+    Application *Application::instance = nullptr;
+
+    Application *create_application();
 }

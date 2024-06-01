@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "core/core.h"
+#include "renderer.h"
 
 namespace Snowflake
 {
@@ -17,7 +18,6 @@ namespace Snowflake
     public:
 
         Shader() {}
-        Shader(std::string _name, std::string vertexShaderPath, std::string fragementShaderPath, std::string geometryShaderPath = "") {}
         virtual void use() = 0;
         virtual void setBool(const std::string &name, bool value) const = 0;
         virtual void setInt(const std::string &name, int value) const = 0;
@@ -35,6 +35,8 @@ namespace Snowflake
         unsigned int getNativeShader() { return ID; }
         std::string getName() { return name; }
 
+        static std::shared_ptr<Shader> create(std::string _name, std::string vertexShaderPath, std::string fragementShaderPath, std::string geometryShaderPath = "");
+
     };
 
     class GLShader : public Shader
@@ -46,7 +48,7 @@ namespace Snowflake
             unsigned int flag;
             if (type == "PROGRAM")
             {
-                glGetShaderiv(shader, GL_LINK_STATUS, &success);
+                glGetProgramiv(shader, GL_LINK_STATUS, &success);
                 if (!success)
                 {
                     glGetShaderInfoLog(shader, 512, NULL, infoLog);
@@ -136,6 +138,7 @@ namespace Snowflake
             }
 
             ID = glCreateProgram();
+            // checkErrors(ID, "PROGRAM");
             glAttachShader(ID, vertexShader);
             glAttachShader(ID, fragmentShader);
 
@@ -204,4 +207,16 @@ namespace Snowflake
             glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
         }
     };
+
+    std::shared_ptr<Shader> Shader::create(std::string _name, std::string vertexShaderPath, std::string fragementShaderPath, std::string geometryShaderPath)
+    {
+        switch (Renderer::getAPI())
+        {
+        case GraphicsAPI::OpenGL:
+            return std::make_shared<GLShader>(_name, vertexShaderPath, fragementShaderPath, geometryShaderPath);
+        case GraphicsAPI::None:
+            SF_LOGE("API unsupported!");
+        }
+        return nullptr;
+    }
 } // namespace Snowflake
