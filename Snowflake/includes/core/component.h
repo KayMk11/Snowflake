@@ -4,7 +4,7 @@
 
 namespace Snowflake
 {
-    enum class ComponentType 
+    enum class ComponentType
     {
         RENDERABLE,
         NONE
@@ -14,8 +14,10 @@ namespace Snowflake
     {
     protected:
         ComponentType mType;
+
     public:
         Component(ComponentType type) : mType(type) {}
         ~Component() {}
+        ComponentType getType() { return mType; }
     };
 } // namespace Snowflake

@@ -4,131 +4,9 @@
 
 #include "core/core.h"
 #include "renderer.h"
+#include "layouts.h"
 namespace Snowflake
 {
-    enum class ShaderDataType
-    {
-        None = 0,
-        Float,
-        Float2,
-        Float3,
-        Float4,
-        Int,
-        Int2,
-        Int3,
-        Int4,
-        Bool,
-        Mat3,
-        Mat4
-    };
-    // REVIEW
-    static uint32_t ShaderDataTypeSize(ShaderDataType type)
-    {
-        switch (type)
-        {
-        case ShaderDataType::Float:
-            return 4;
-        case ShaderDataType::Float2:
-            return 4 * 2;
-        case ShaderDataType::Float3:
-            return 4 * 3;
-        case ShaderDataType::Float4:
-            return 4 * 4;
-        case ShaderDataType::Mat3:
-            return 4 * 3 * 3;
-        case ShaderDataType::Mat4:
-            return 4 * 4 * 4;
-        case ShaderDataType::Int:
-            return 4;
-        case ShaderDataType::Int2:
-            return 4 * 2;
-        case ShaderDataType::Int3:
-            return 4 * 3;
-        case ShaderDataType::Int4:
-            return 4 * 4;
-        case ShaderDataType::Bool:
-            return 1;
-        }
-
-        SF_LOGE("Unknown ShaderDataType!");
-        return 0;
-    }
-    struct BufferElement
-    {
-        std::string mName;
-        ShaderDataType mType;
-        bool mNormalised;
-        uint32_t mSize = 0;
-        size_t mOffset = 0;
-
-        BufferElement(std::string name, ShaderDataType type, bool normalised) : mName(name),
-                                                                                mType(type),
-                                                                                mSize(ShaderDataTypeSize(type)),
-                                                                                mOffset(0),
-                                                                                mNormalised(normalised) {}
-
-        uint32_t GetComponentCount() const
-        {
-            switch (mType)
-            {
-            case ShaderDataType::Float:
-                return 1;
-            case ShaderDataType::Float2:
-                return 2;
-            case ShaderDataType::Float3:
-                return 3;
-            case ShaderDataType::Float4:
-                return 4;
-            case ShaderDataType::Mat3:
-                return 3; // 3* float3
-            case ShaderDataType::Mat4:
-                return 4; // 4* float4
-            case ShaderDataType::Int:
-                return 1;
-            case ShaderDataType::Int2:
-                return 2;
-            case ShaderDataType::Int3:
-                return 3;
-            case ShaderDataType::Int4:
-                return 4;
-            case ShaderDataType::Bool:
-                return 1;
-            }
-
-            SF_LOGE("Unknown Enum");
-            return 0;
-        }
-    };
-    struct BufferLayout
-    {
-        std::vector<BufferElement> mElements;
-        uint32_t mStride;
-        void calculateOffsetsAndStride()
-        {
-            size_t offset = 0;
-            mStride = 0;
-            for (auto &element : mElements)
-            {
-                element.mOffset = offset;
-                offset += element.mSize;
-                mStride += element.mSize;
-            }
-        }
-
-    public:
-        BufferLayout() {}
-
-        BufferLayout(std::vector<BufferElement> &elements) : mElements(elements)
-        {
-            calculateOffsetsAndStride();
-        }
-        uint32_t getStride() const { return mStride; }
-        std::vector<BufferElement>::iterator begin() { return mElements.begin(); }
-        std::vector<BufferElement>::iterator end() { return mElements.end(); }
-        std::vector<BufferElement>::const_iterator begin() const { return mElements.begin(); }
-        std::vector<BufferElement>::const_iterator end() const { return mElements.end(); }
-    };
-
     class VertexBuffer
     {
     protected:
@@ -137,8 +15,8 @@ namespace Snowflake
         BufferLayout mLayout;
 
     public:
-        VertexBuffer(uint32_t size, BufferLayout &layout) : mSize(size), mLayout(layout) {}
-        VertexBuffer(float *vertices, uint32_t size, BufferLayout &layout) : mVertices(vertices), mSize(size), mLayout(layout) {}
+        VertexBuffer(uint32_t size, const BufferLayout &layout) : mSize(size), mLayout(layout) {}
+        VertexBuffer(float *vertices, uint32_t size, const BufferLayout &layout) : mVertices(vertices), mSize(size), mLayout(layout) {}
 
         virtual void bind() = 0;
         virtual void unbind() = 0;
@@ -147,8 +25,8 @@ namespace Snowflake
         float *getVertices() { return mVertices; }
         uint32_t getSize() { return mSize; }
         BufferLayout &getLayout() { return mLayout; }
-        static std::shared_ptr<VertexBuffer> create(float *vertices, uint32_t size, BufferLayout &layout);
-        static std::shared_ptr<VertexBuffer> create(uint32_t size, BufferLayout &layout);
+        static std::shared_ptr<VertexBuffer> create(float *vertices, uint32_t size, const BufferLayout &layout);
+        static std::shared_ptr<VertexBuffer> create(uint32_t size, const BufferLayout &layout);
     };
 
     class IndexBuffer
@@ -194,11 +72,11 @@ namespace Snowflake
         unsigned int VBO;
 
     public:
-        GLVertexBuffer(uint32_t size, BufferLayout &layout) : VertexBuffer(size, layout)
+        GLVertexBuffer(uint32_t size, const BufferLayout &layout) : VertexBuffer(size, layout)
         {
             glGenBuffers(1, &VBO);
         }
-        GLVertexBuffer(float *vertices, uint32_t size, BufferLayout &layout) : VertexBuffer(vertices, size, layout)
+        GLVertexBuffer(float *vertices, uint32_t size, const BufferLayout &layout) : VertexBuffer(vertices, size, layout)
         {
             glGenBuffers(1, &VBO);
         }
@@ -247,7 +125,7 @@ namespace Snowflake
         }
     };
 
-    std::shared_ptr<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size, BufferLayout &layout)
+    std::shared_ptr<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size, const BufferLayout &layout)
     {
         switch (Renderer::getAPI())
         {
@@ -258,7 +136,7 @@ namespace Snowflake
         }
         return nullptr;
     }
-    std::shared_ptr<VertexBuffer> VertexBuffer::create(uint32_t size, BufferLayout &layout)
+    std::shared_ptr<VertexBuffer> VertexBuffer::create(uint32_t size, const BufferLayout &layout)
     {
         switch (Renderer::getAPI())
         {

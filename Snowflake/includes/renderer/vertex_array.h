@@ -21,7 +21,13 @@ namespace Snowflake
             unbind();
             mIndexBuffer = indexbuffer;
         }
-        uint32_t getIndexBufferSize() { return mIndexBuffer->getSize(); }
+        uint32_t getIndexBufferSize()
+        {
+            if (mIndexBuffer == nullptr)
+                return 0;
+            return mIndexBuffer->getSize();
+        }
+
         static std::shared_ptr<VertexArray> create();
     };
 
@@ -73,6 +79,7 @@ namespace Snowflake
             //     GL_FALSE,
             //     3 * sizeof(float),
             //     (void *)0);
+            // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
             glVertexAttribPointer(
                 i,
                 layout.mElements[i].GetComponentCount(),

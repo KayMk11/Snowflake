@@ -26,13 +26,7 @@ namespace Snowflake
             Mesh mesh(vertices, indices, m);
             mMeshes.emplace_back(mesh);
         }
-        void draw()
-        {
-            // draw all meshes
-            for (auto &mesh : mMeshes)
-                mesh.draw();
-        }
-        // static std::shared_ptr<Renderable> create();
+        std::vector<Mesh> &getMeshes() { return mMeshes; }
     };
 
     class Model : public Renderable
@@ -69,7 +63,6 @@ namespace Snowflake
         }
 
     public:
-        // constructor
         Model(std::string const &path) { loadModel(path); }
     };
 } // namespace Snowflake

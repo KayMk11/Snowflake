@@ -5,6 +5,7 @@
 #include "core/core.h"
 #include "material.h"
 #include "vertex_array.h"
+#include "layouts.h"
 namespace Snowflake
 {
     class Mesh
@@ -18,14 +19,9 @@ namespace Snowflake
         void setup_mesh()
         {
             VAO = VertexArray::create();
-            BufferElement position = {"Position", ShaderDataType::Float3, false};
-            BufferElement normal = {"Normal", ShaderDataType::Float3, false};
-            BufferElement texcoord = {"TexCoord", ShaderDataType::Float2, false};
-            // std::vector<BufferElement> elements = {position}; // TO REMOVE
-            std::vector<BufferElement> elements = {position, normal, texcoord};
-            BufferLayout layout(elements);
-            auto vbo = VertexBuffer::create(&mVertices[0], mVertices.size(), layout);
-            auto ebo = IndexBuffer::create(&mIndices[0], mIndices.size());
+
+            auto vbo = VertexBuffer::create(&mVertices[0], sizeof(float) * mVertices.size(), POSITION_NORMAL_TEXTURE_LAYOUT);
+            auto ebo = IndexBuffer::create(&mIndices[0], sizeof(unsigned int) * mIndices.size());
             VAO->addVertexBuffer(vbo);
             VAO->setIndexBuffer(ebo);
             // VAO->unbind();
@@ -38,13 +34,18 @@ namespace Snowflake
         {
             setup_mesh();
         }
-
-        void draw()
+        bool isMeshIndexed()
+        {
+            return VAO->getIndexBufferSize() != 0;
+        }
+        uint32_t activateMesh()
         {
             VAO->bind();
-            auto size = static_cast<unsigned int>(VAO->getIndexBufferSize());
-            // TODO move this to renderer
-            glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
-        };
+            if (isMeshIndexed())
+                return static_cast<unsigned int>(VAO->getIndexBufferSize());
+            // else
+            //     return VAO->
+            return 0;
+        }
     };
 } // namespace Snowflake
